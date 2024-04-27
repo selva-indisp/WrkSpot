@@ -15,4 +15,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "WrkSpot"
 include(":app")
- 
+include(":designsystem")
+include(":network")
+include(":core")
+include(":country")

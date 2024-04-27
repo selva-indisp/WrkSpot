@@ -1,4 +1,4 @@
-package com.indisp.wrkspot.ui.theme
+package com.indisp.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 

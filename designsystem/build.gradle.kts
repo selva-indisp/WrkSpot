@@ -1,18 +1,14 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.indisp.wrkspot"
+    namespace = "com.indisp.designsystem"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.indisp.wrkspot"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 21
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -42,21 +38,16 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
-    implementation(project(":country"))
-
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.graphics)
     implementation(libs.compose.preview)
     implementation(libs.compose.material3)
-    implementation(libs.compose.navigation)
     implementation(libs.compose.activity)
+
+    implementation(libs.ktx.core)
+    implementation(libs.ktx.lifecycle)
 }

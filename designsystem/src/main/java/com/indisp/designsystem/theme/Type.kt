@@ -1,4 +1,4 @@
-package com.indisp.wrkspot.ui.theme
+package com.indisp.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
