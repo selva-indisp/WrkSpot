@@ -6,6 +6,5 @@ data class State(
     val countriesList: PersistentList<PresentableCountry>,
     val searchQuery: String,
     val filters: PersistentList<PopulationFilter>,
-    val isLoading: Boolean,
-    val error: String
+    val isLoading: Boolean
 )

@@ -1,10 +1,9 @@
 package com.indisp.country.ui
 
 import com.indisp.country.domain.model.Country
-import com.indisp.country.domain.model.SearchFilter
+import com.indisp.country.domain.model.Filter
 import com.indisp.country.ui.model.PopulationFilter
 import com.indisp.country.ui.model.PresentableCountry
-import com.indisp.designsystem.components.textfield.FilterItem
 
 fun toPresentableCountry(country: Country) =
     PresentableCountry(
@@ -16,9 +15,9 @@ fun toPresentableCountry(country: Country) =
         flagUrl = country.flagUrl
     )
 
-fun toFilterItem(filter: SearchFilter) = PopulationFilter(
+fun toFilterItem(filter: Filter.Population) = PopulationFilter(
     id = filter.id,
-    text = filter.name,
+    text = filter.text,
     isSelected = false,
-    filter = filter
+    limit = filter.limit
 )

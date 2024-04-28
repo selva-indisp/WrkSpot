@@ -1,5 +1,6 @@
 package com.indisp.country.ui.view
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,12 +17,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -29,6 +33,7 @@ import com.indisp.country.R
 import com.indisp.country.ui.model.Event
 import com.indisp.country.ui.model.PopulationFilter
 import com.indisp.country.ui.model.PresentableCountry
+import com.indisp.country.ui.model.SideEffect
 import com.indisp.country.ui.model.State
 import com.indisp.designsystem.components.composable.LifecycleObserver
 import com.indisp.designsystem.components.loader.DsLoader
@@ -40,26 +45,41 @@ import com.indisp.designsystem.components.textfield.FilterItem
 import com.indisp.designsystem.resource.Size
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun CountryListScreen(
     stateFlow: StateFlow<State>,
+    sideEffectFlow: StateFlow<SideEffect>,
     onEvent: (Event) -> Unit,
 ) {
     val state by stateFlow.collectAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        sideEffectFlow.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is SideEffect.ShowError -> {
+                    Toast.makeText(context, sideEffect.message, Toast.LENGTH_LONG).show()
+                    onEvent(Event.OnErrorShown)
+                }
+                else -> {}
+            }
+        }
+    }
+
     LifecycleObserver(onCreate = { onEvent(Event.ScreenCreated) })
+
     Scaffold { padding ->
         if (state.isLoading) DsLoader()
-        if (state.countriesList.isNotEmpty()) {
-            Column {
-                Spacer(modifier = Modifier.height(Size.large))
-                SearchField(
-                    searchQuery = state.searchQuery, filters = state.filters, onEvent = onEvent
-                )
-                CountryList(
-                    state.countriesList, Modifier.padding(padding)
-                )
-            }
+        Column {
+            Spacer(modifier = Modifier.height(Size.large))
+            SearchField(
+                searchQuery = state.searchQuery, filters = state.filters, onEvent = onEvent
+            )
+            CountryList(
+                state.countriesList, Modifier.padding(padding)
+            )
         }
     }
 }
