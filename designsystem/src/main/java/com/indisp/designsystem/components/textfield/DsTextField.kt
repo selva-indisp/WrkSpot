@@ -12,7 +12,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -34,9 +33,9 @@ fun DsTextField(
     enabled: Boolean = true,
     focusRequester: FocusRequester = remember { FocusRequester() },
     prefix: @Composable () -> Unit = {},
+    suffix: @Composable () -> Unit = {},
     onDone: () -> Unit = {}
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     val keyboardOptions = remember(inputType) {
         when (inputType) {
             DsTextInputType.PhoneNumber -> KeyboardOptions.Default.copy(
@@ -75,15 +74,14 @@ fun DsTextField(
         placeholder = { DsText(text = hint, type = DsTextType.Hint() )},
         keyboardActions = KeyboardActions(
             onDone = {
-                keyboardController?.hide()
                 onDone()
             },
             onSearch = {
-                keyboardController?.hide()
                 onDone()
             }
         ),
-        prefix = prefix
+        prefix = prefix,
+        suffix = suffix
     )
 }
 

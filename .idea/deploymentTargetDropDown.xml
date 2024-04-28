@@ -8,6 +8,9 @@
       <entry key="country">
         <State />
       </entry>
+      <entry key="country2">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

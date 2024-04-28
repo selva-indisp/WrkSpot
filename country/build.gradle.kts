@@ -1,6 +1,5 @@
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kapt)
     alias(libs.plugins.serialization)
@@ -11,13 +10,10 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.indisp.country"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 21
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -36,6 +32,17 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
@@ -49,6 +56,8 @@ dependencies {
     implementation(libs.immutableCollection)
 
     implementation(libs.ktx.core)
+    implementation(libs.appcompat)
+    implementation(libs.material)
     implementation(libs.ktx.lifecycle)
 
     implementation(platform(libs.compose.bom))
@@ -58,7 +67,7 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.compose.navigation)
     implementation(libs.compose.activity)
-
+    implementation(libs.coil)
     implementation(libs.room)
     kapt(libs.room.compiler)
 

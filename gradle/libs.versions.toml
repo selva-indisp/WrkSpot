@@ -40,6 +40,8 @@ compose-material3 = { module = "androidx.compose.material3:material3" }
 room = { module = "androidx.room:room-ktx", version.ref = "room"}
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room"}
 
+coil = { module = "io.coil-kt:coil-compose", version = "2.6.0"}
+
 junit = { module = "junit:junit", version = "4.13.2" }
 junit-android = { module = "androidx.test.ext:junit", version = "1.1.5" }
 espresso = { module = "androidx.test.espresso:espresso-core", version = "3.5.1" }
@@ -53,5 +55,6 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
 
 

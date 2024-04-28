@@ -50,4 +50,5 @@ dependencies {
 
     implementation(libs.ktx.core)
     implementation(libs.ktx.lifecycle)
+    implementation(libs.immutableCollection)
 }

@@ -9,12 +9,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.indisp.designsystem.components.image.ScIcon
 import com.indisp.designsystem.resource.Size
 
 @Composable
@@ -28,8 +29,9 @@ fun DsText(
     var color = when (type) {
         DsTextType.Title,
         is DsTextType.Primary -> MaterialTheme.colorScheme.onBackground
+
         DsTextType.Error -> MaterialTheme.colorScheme.error
-        DsTextType.Ternary -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+        is DsTextType.Ternary -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
         is DsTextType.Secondary -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
         is DsTextType.Hint -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
     }
@@ -37,39 +39,39 @@ fun DsText(
     if (isDisabled)
         color = color.copy(alpha = 0.3f)
 
-    if (type.prefixIcon != null) {
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (type.prefixIcon != null) {
             Icon(
                 imageVector = type.prefixIcon!!,
                 contentDescription = "prefixIcon",
                 tint = color,
                 modifier = Modifier
                     .padding(top = Size.xSmall, end = Size.small)
-                    .size(20.dp)
-            )
-
-            Text(
-                text = text,
-                fontSize = type.size,
-                color = color,
-                fontWeight = type.weight,
-                letterSpacing = 0.5.sp,
-                textAlign = align,
+                    .size(Size.xxLarge)
             )
         }
-    } else {
         Text(
             text = text,
             fontSize = type.size,
             color = color,
             fontWeight = type.weight,
-            letterSpacing = 1.sp,
+            letterSpacing = 0.5.sp,
             textAlign = align,
-            modifier = modifier
         )
+
+        type.suffixIcon?.let {
+            ScIcon(
+                config = it,
+                tintColor = color,
+                modifier = Modifier
+                    .padding(vertical = Size.xSmall, horizontal = Size.small)
+                    .size(Size.xLarge)
+            )
+        }
+
     }
 }
 
@@ -77,6 +79,7 @@ sealed class DsTextType(
     open val size: TextUnit,
     open val weight: FontWeight,
     open val prefixIcon: ImageVector? = null,
+    open val suffixIcon: ImageConfig? = null,
     open val highlight: Boolean = false
 ) {
 
@@ -102,9 +105,12 @@ sealed class DsTextType(
         prefixIcon = imageVector
     )
 
-    object Ternary : DsTextType(
+    data class Ternary(
+        override val suffixIcon: ImageConfig?
+    ) : DsTextType(
         size = 12.sp,
-        weight = FontWeight.Normal
+        weight = FontWeight.Normal,
+        suffixIcon = suffixIcon
     )
 
     object Error : DsTextType(
@@ -117,4 +123,9 @@ sealed class DsTextType(
         weight = FontWeight.Normal,
         prefixIcon = imageVector
     )
+}
+
+sealed interface ImageConfig {
+    data class Vector(val vector: ImageVector) : ImageConfig
+    data class Paint(val painter: Painter) : ImageConfig
 }
